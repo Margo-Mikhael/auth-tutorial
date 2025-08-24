@@ -95,7 +95,42 @@ export const verifyEmail = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  res.send("login route");
+  // get it from the user , which will they enter
+  const { email, password } = req.body;
+  try {
+    // first make sure there is a user registerd with that email
+    const user = await User.findOne({ email });
+
+    // if the email isn't registered then return this response
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid credentials" });
+    }
+    // else compare the password entered by the user to the one on the DB , if false return same response
+    const isPasswordValid = await bcryptjs.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid credentials" });
+    }
+    generateTokenAndSetCookie(res, user._id); // if true then generate a token
+    user.lastLogin = new Date(); //update last login date
+    return res //send response
+      .status(200)
+      .json({
+        success: true,
+        message: "Logged in successfully",
+        user: {
+          ...user._doc,
+          password: undefined,
+        },
+      });
+  } catch (error) {
+    console.log("Error in Login function", error);
+    res.status(400).json({ success: false, message: error.message });
+  }
 };
 
 export const logout = async (req, res) => {
