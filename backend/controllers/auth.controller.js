@@ -9,7 +9,6 @@ import {
   sendWelcomeEmail,
 } from "../mailtrap/emails.js";
 import { User } from "../models/user.model.js";
-import crypto from "crypto";
 
 export const signup = async (req, res) => {
 	const { email, password, name } = req.body;
