@@ -1,3 +1,4 @@
+import { Route, Routes } from "react-router-dom";
 import FloatingShape from "./components/FloatingShape";
 
 function App() {
@@ -29,6 +30,14 @@ function App() {
         left="-10%"
         delay={2}
       />
+
+      {/* Routing  */}
+      <Routes>
+        <Route path="/" element={"Home"} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/login" element={<LoginPage />} />
+      </Routes>
+
       {/* // App Wrapper */}
     </div>
   );
